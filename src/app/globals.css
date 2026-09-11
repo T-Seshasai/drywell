@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-surface-50 text-surface-900 antialiased;
+  }
+}
+
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.25s ease-out;
+  }
+
+  @property --border-angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  @keyframes rotate-border-colors {
+    to {
+      --border-angle: 360deg;
+    }
+  }
+
+  @keyframes quality-border-pulse {
+    0%,
+    100% {
+      filter: brightness(1);
+    }
+    50% {
+      filter: brightness(1.15);
+    }
+  }
+
+  .quality-border-standard,
+  .quality-border-premium {
+    animation: rotate-border-colors 2.5s linear infinite, quality-border-pulse 2s ease-in-out infinite;
+  }
+
+  .quality-border-standard {
+    background: conic-gradient(
+      from var(--border-angle),
+      #0d9488,
+      #2563eb,
+      #10b981,
+      #06b6d4,
+      #fbbf24,
+      #0d9488
+    );
+  }
+
+  .quality-border-premium {
+    background: conic-gradient(
+      from var(--border-angle),
+      #fbbf24,
+      #f97316,
+      #ef4444,
+      #d946ef,
+      #ec4899,
+      #fbbf24
+    );
+  }
+}
