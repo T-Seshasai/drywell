@@ -132,6 +132,7 @@ export interface CartLineItem {
   quantity: number;
   image: string;
   productType: ProductType;
+  qualityTier?: "standard" | "premium";
 }
 
 export interface OrderItem {
@@ -141,6 +142,7 @@ export interface OrderItem {
   categorySlug: string;
   price: number;
   quantity: number;
+  qualityTier?: "standard" | "premium";
 }
 
 export interface OrderCustomer {

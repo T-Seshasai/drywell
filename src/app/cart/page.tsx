@@ -6,6 +6,7 @@ import ProductImage from "@/components/shop/ProductImage";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/catalog";
+import { getProduct } from "@/lib/store";
 import { getAttribution } from "@/lib/analytics/attribution";
 import {
   trackViewCart,
@@ -90,6 +91,14 @@ export default function CartPage() {
     form.address.trim() &&
     form.pincode.trim();
 
+  const orderItemsForWhatsApp = () =>
+    items.map((i) => ({
+      name: i.name,
+      quantity: i.quantity,
+      price: i.price,
+      qualityTier: i.qualityTier ?? getProduct(i.productId)?.qualityTier,
+    }));
+
   const handleContinueToPayment = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError("");
@@ -131,11 +140,7 @@ export default function CartPage() {
         total,
         paymentMethod: "cod",
         customer: form,
-        items: items.map((i) => ({
-          name: i.name,
-          quantity: i.quantity,
-          price: i.price,
-        })),
+        items: orderItemsForWhatsApp(),
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
@@ -183,11 +188,7 @@ export default function CartPage() {
                 total,
                 paymentMethod: "cod",
                 customer: form,
-                items: items.map((i) => ({
-                  name: i.name,
-                  quantity: i.quantity,
-                  price: i.price,
-                })),
+                items: orderItemsForWhatsApp(),
               });
             }}
             className="w-full mt-2 text-sm text-brand-600 hover:underline"

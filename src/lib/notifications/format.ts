@@ -1,5 +1,19 @@
-import { Order, QuoteRequest } from "@/types/catalog";
+import { Order, OrderItem, QuoteRequest } from "@/types/catalog";
 import { formatPrice } from "@/lib/catalog";
+
+export function formatQualityLabel(qualityTier?: "standard" | "premium") {
+  if (qualityTier === "premium") return "Premium Quality";
+  if (qualityTier === "standard") return "Standard Quality";
+  return "N/A";
+}
+
+export function formatOrderItemBlock(item: OrderItem, index: number) {
+  return [
+    `${index + 1}. ${item.name}`,
+    `   Quality: ${formatQualityLabel(item.qualityTier)}`,
+    `   Price: ${formatPrice(item.price)} × ${item.quantity} = ${formatPrice(item.price * item.quantity)}`,
+  ].join("\n");
+}
 
 export function formatOrderMessage(order: Order) {
   const lines = [
@@ -19,9 +33,7 @@ export function formatOrderMessage(order: Order) {
     `${order.customer.address}, ${order.customer.city}, ${order.customer.state} — ${order.customer.pincode}`,
     "",
     "Items",
-    ...order.items.map(
-      (item) => `- ${item.name} x ${item.quantity} = ${formatPrice(item.price * item.quantity)}`
-    ),
+    ...order.items.flatMap((item, index) => [formatOrderItemBlock(item, index), ""]),
     "",
     `Subtotal: ${formatPrice(order.subtotal)}`,
     `Shipping: ${order.shipping ? formatPrice(order.shipping) : "Free"}`,

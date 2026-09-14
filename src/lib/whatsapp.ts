@@ -1,4 +1,6 @@
 import { business } from "@/lib/config/business";
+import { formatOrderItemBlock } from "@/lib/notifications/format";
+import { OrderItem } from "@/types/catalog";
 
 export function buildWhatsAppUrl(message: string, phone = business.whatsapp) {
   const digits = phone.replace(/\D/g, "");
@@ -96,10 +98,25 @@ export function buildOrderWhatsAppMessage(params: {
     state: string;
     pincode: string;
   };
-  items: Array<{ name: string; quantity: number; price: number }>;
+  items: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+    qualityTier?: "standard" | "premium";
+  }>;
 }) {
   const payment =
     params.paymentMethod === "cod" ? "Cash on Delivery" : params.paymentMethod ?? "Cash on Delivery";
+
+  const orderItems: OrderItem[] = params.items.map((item, index) => ({
+    productId: `item-${index}`,
+    sku: "",
+    name: item.name,
+    categorySlug: "",
+    price: item.price,
+    quantity: item.quantity,
+    qualityTier: item.qualityTier,
+  }));
 
   const lines = [
     "New order from Drywell Hangers website",
@@ -117,13 +134,13 @@ export function buildOrderWhatsAppMessage(params: {
     `${params.customer.address}, ${params.customer.city}, ${params.customer.state} — ${params.customer.pincode}`,
     "",
     "Items",
-    ...params.items.map(
-      (item) =>
-        `- ${item.name} x ${item.quantity} = ₹${(item.price * item.quantity).toLocaleString("en-IN")}`
-    ),
+    ...orderItems.flatMap((item, index) => [
+      formatOrderItemBlock(item, index),
+      "",
+    ]),
   ];
 
-  return lines.join("\n");
+  return lines.join("\n").trim();
 }
 
 export function openWhatsAppOrder(params: {
@@ -141,7 +158,12 @@ export function openWhatsAppOrder(params: {
     state: string;
     pincode: string;
   };
-  items: Array<{ name: string; quantity: number; price: number }>;
+  items: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+    qualityTier?: "standard" | "premium";
+  }>;
 }) {
   const url = buildWhatsAppUrl(buildOrderWhatsAppMessage(params));
   window.open(url, "_blank", "noopener,noreferrer");

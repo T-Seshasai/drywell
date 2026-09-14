@@ -29,6 +29,7 @@ export default function ProductCard({ product }: { product: Product }) {
       quantity: 1,
       image: product.images[0]?.url ?? "",
       productType: product.productType,
+      qualityTier: product.qualityTier,
     });
   };
 

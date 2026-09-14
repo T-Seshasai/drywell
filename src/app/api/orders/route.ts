@@ -71,6 +71,7 @@ export async function POST(req: NextRequest) {
         categorySlug: product.categorySlug,
         price,
         quantity: qty,
+        qualityTier: product.qualityTier,
       });
       subtotal += price * qty;
     }

@@ -60,6 +60,7 @@ export default function ProductHybridActions({
     quantity: qty,
     image: product.images[0]?.url ?? "",
     productType: product.productType,
+    qualityTier: product.qualityTier,
   });
 
   const handleAdd = () => {
