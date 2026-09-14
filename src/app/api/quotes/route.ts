@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { products } from "@/lib/catalog";
 import { generateQuoteId, saveQuote } from "@/lib/orders/memory-store";
+import { notifyNewQuote } from "@/lib/notifications";
 import { QuoteRequest, OrderAttribution } from "@/types/catalog";
 
 interface QuotePayload {
@@ -49,6 +50,7 @@ export async function POST(req: NextRequest) {
     };
 
     saveQuote(quote);
+    void notifyNewQuote(quote);
 
     return NextResponse.json({ quoteId: quote.quoteId });
   } catch {

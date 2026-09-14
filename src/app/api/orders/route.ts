@@ -4,6 +4,7 @@ import {
   generateOrderId,
   saveOrder,
 } from "@/lib/orders/memory-store";
+import { notifyNewOrder } from "@/lib/notifications";
 import { Order, OrderAttribution } from "@/types/catalog";
 
 interface OrderPayload {
@@ -95,6 +96,7 @@ export async function POST(req: NextRequest) {
     };
 
     saveOrder(order);
+    void notifyNewOrder(order);
 
     return NextResponse.json({ orderId: order.orderId, total: order.total });
   } catch {
