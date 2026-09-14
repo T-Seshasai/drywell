@@ -12,10 +12,10 @@ import {
   trackAddPaymentInfo,
   mapProductToAnalyticsItem,
 } from "@/lib/analytics/events";
-import PhonePePayment from "@/components/payment/PhonePePayment";
+import CashOnDeliveryPayment from "@/components/payment/CashOnDeliveryPayment";
 import PageHero from "@/components/layout/PageHero";
 import PageContent from "@/components/layout/PageContent";
-import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, MapPin, CreditCard } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, MapPin, Banknote } from "lucide-react";
 
 interface DeliveryForm {
   name: string;
@@ -46,7 +46,7 @@ export default function CartPage() {
   const router = useRouter();
   const [form, setForm] = useState<DeliveryForm>(emptyForm);
   const [formError, setFormError] = useState("");
-  const [showPayment, setShowPayment] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
   const [orderId, setOrderId] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -63,7 +63,7 @@ export default function CartPage() {
     );
   }, [items, total]);
 
-  if (items.length === 0 && !showPayment) {
+  if (items.length === 0 && !showCheckout) {
     return (
       <>
         <PageHero title="Your Cart" description="Review items before checkout." centered />
@@ -116,7 +116,7 @@ export default function CartPage() {
         body: JSON.stringify({
           customer: form,
           items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
-          paymentMethod: "upi",
+          paymentMethod: "cod",
           attribution: getAttribution(),
         }),
       });
@@ -124,7 +124,7 @@ export default function CartPage() {
       if (!res.ok) throw new Error(data.error ?? "Could not create order");
 
       setOrderId(data.orderId);
-      setShowPayment(true);
+      setShowCheckout(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       setFormError(err instanceof Error ? err.message : "Something went wrong");
@@ -142,14 +142,14 @@ export default function CartPage() {
     <>
       <PageHero
         title="Your Cart"
-        description="Add delivery details, then pay via UPI"
+        description="Add delivery details, then confirm your Cash on Delivery order"
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "Cart" },
         ]}
       />
       <PageContent className="py-8">
-      {showPayment && orderId && (
+      {showCheckout && orderId && (
         <div className="mb-8">
           <div className="mb-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-sm">
             <p className="font-semibold text-emerald-800">Delivery details saved</p>
@@ -159,13 +159,13 @@ export default function CartPage() {
             <p className="text-emerald-600">{form.address}, {form.city} — {form.pincode}</p>
             <p className="text-emerald-600">Phone: {form.phone}</p>
           </div>
-          <PhonePePayment amount={total} orderId={orderId} />
+          <CashOnDeliveryPayment amount={total} orderId={orderId} />
           <button
             type="button"
             onClick={handlePaymentDone}
             className="w-full mt-4 py-3 bg-brand-600 text-white font-semibold rounded-lg hover:bg-brand-700"
           >
-            I have completed UPI payment
+            Confirm Cash on Delivery order
           </button>
         </div>
       )}
@@ -185,7 +185,7 @@ export default function CartPage() {
                     {item.name}
                   </Link>
                   <p className="text-sm font-bold mt-1">{formatPrice(item.price)}</p>
-                  {!showPayment && (
+                  {!showCheckout && (
                     <div className="flex items-center gap-3 mt-2">
                       <div className="flex items-center border rounded-full text-sm">
                         <button type="button" onClick={() => setQuantity(item.productId, item.quantity - 1)} className="p-1.5">
@@ -208,7 +208,7 @@ export default function CartPage() {
           </section>
 
           {/* Delivery form */}
-          {!showPayment && (
+          {!showCheckout && (
             <section className="bg-white rounded-2xl border border-surface-200 p-6">
               <div className="flex items-center gap-2 mb-5">
                 <MapPin className="w-5 h-5 text-brand-600" />
@@ -331,10 +331,10 @@ export default function CartPage() {
                 <button
                   type="submit"
                   disabled={loading || !isFormValid}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#5f259f] text-white font-semibold rounded-lg hover:bg-[#4a1d7a] disabled:opacity-50 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-brand-600 text-white font-semibold rounded-lg hover:bg-brand-700 disabled:opacity-50 transition-colors"
                 >
-                  <CreditCard className="w-5 h-5" />
-                  {loading ? "Processing..." : `Continue to UPI Payment — ${formatPrice(total)}`}
+                  <Banknote className="w-5 h-5" />
+                  {loading ? "Processing..." : `Place Order — Cash on Delivery ${formatPrice(total)}`}
                 </button>
               </form>
             </section>
@@ -357,13 +357,13 @@ export default function CartPage() {
             <span>{formatPrice(total)}</span>
           </div>
 
-          {!showPayment ? (
+          {!showCheckout ? (
             <p className="text-xs text-stone-400 mt-4 text-center">
-              Fill delivery details to unlock UPI payment
+              Fill delivery details to place a Cash on Delivery order
             </p>
           ) : (
             <p className="text-xs text-brand-600 mt-4 text-center font-medium">
-              Scan UPI QR above to complete payment
+              Pay {formatPrice(total)} when delivered and installed
             </p>
           )}
 

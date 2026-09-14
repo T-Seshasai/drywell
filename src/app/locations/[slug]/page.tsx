@@ -55,7 +55,7 @@ export default async function LocationPage({ params }: Props) {
         <Link href="/quote" className="inline-flex px-6 py-3 bg-brand-600 text-white rounded-lg font-medium">
           Get Free Quote in {location.name}
         </Link>
-        <p className="text-sm text-stone-500 mt-6">Call {process.env.NEXT_PUBLIC_PHONE_NUMBER ?? "+918125993888"} or WhatsApp for same-week visits where available.</p>
+        <p className="text-sm text-stone-500 mt-6">Call {process.env.NEXT_PUBLIC_PHONE_NUMBER ?? "+918125993888"} or WhatsApp for same-day visits where available.</p>
       </PageContent>
     </>
   );

@@ -12,7 +12,7 @@ export const business: BusinessConfig & {
   name: process.env.NEXT_PUBLIC_BUSINESS_NAME ?? "Drywell Hangers",
   tagline: "Dry Well Cloth Hangers & Home Solutions",
   description:
-    "Hyderabad-based supplier and installer of cloth drying hangers, invisible grills, safety nets, shoe racks, and home utility solutions.",
+    "Hyderabad & Secunderabad-based manufacturers and installers of cloth drying hangers, invisible grills, safety nets, shoe racks, and mosquito doors.",
   heroBadge: "Hyderabad's & Secunderabad Trusted Home Solutions",
   heroTitle: "Dry Well Cloth Hangers & Home Solutions",
   heroSubtitle:
@@ -21,10 +21,10 @@ export const business: BusinessConfig & {
   aboutText:
     "Drywell Hangers is a Hyderabad-based home solutions brand focused on cloth drying systems and everyday storage fittings. From ceiling hangers and pulley setups to shoe racks and balcony drying racks, we help apartments and independent homes make better use of space.",
   promoBanner:
-    "Same-week installation across Hyderabad & Secunderabad | 1-5 years warranty on selected products",
+    "Same-Day Installation across Hyderabad & Secunderabad | 1-5 years warranty on selected products",
   phone: process.env.NEXT_PUBLIC_PHONE_NUMBER ?? "+918125993888",
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "918125993888",
-  email: process.env.NEXT_PUBLIC_BUSINESS_EMAIL ?? "info@drywellhangers.in",
+  email: process.env.NEXT_PUBLIC_BUSINESS_EMAIL ?? "drywellhanger@gmail.com",
   website: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   address: "Hyderabad, Telangana, India",
   upiId: process.env.UPI_ID ?? "drywellhangers@ybl",

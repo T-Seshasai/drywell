@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
       subtotal += price * qty;
     }
 
-    const shipping = subtotal >= 3000 ? 0 : 149;
+    const shipping = 0;
     const total = subtotal + shipping;
 
     const order: Order = {
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
       currency: "INR",
       paymentStatus: "pending",
       orderStatus: "pending",
-      paymentMethod: body.paymentMethod ?? "upi",
+      paymentMethod: body.paymentMethod ?? "cod",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       attribution: body.attribution,

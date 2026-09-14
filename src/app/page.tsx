@@ -62,7 +62,7 @@ export default function HomePage() {
             {store.stats.customers} Happy Customers · 1-5 Years Warranty
           </h2>
           <p className="text-brand-100 max-w-2xl mx-auto mb-8">
-            Same-week installation · Professional fitting · Warranty on selected products
+            Same-Day Installation · Professional fitting · Warranty on selected products
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <a

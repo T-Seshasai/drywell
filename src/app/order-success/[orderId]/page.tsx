@@ -36,7 +36,9 @@ export default async function OrderSuccessPage({ params }: Props) {
             <span>Total</span>
             <span>{formatPrice(order.total)}</span>
           </div>
-          <p className="text-xs text-stone-500 mt-3">Payment status: {order.paymentStatus}</p>
+          <p className="text-xs text-stone-500 mt-3">
+            Payment: {order.paymentMethod === "cod" ? "Cash on Delivery" : order.paymentMethod ?? order.paymentStatus}
+          </p>
           <div className="mt-4 pt-4 border-t text-sm text-stone-600">
             <p className="font-medium text-stone-800 mb-1">Delivery to</p>
             <p>{order.customer.name} · {order.customer.phone}</p>

@@ -27,7 +27,7 @@ export const categoryNavItems = [
 ];
 
 export const promoBanner =
-  "Same-week installation across Hyderabad & Secunderabad | 1-5 years warranty on selected products";
+  "Same-Day Installation across Hyderabad & Secunderabad | 1-5 years warranty on selected products";
 
 export const whyChoose = [
   { title: "Skilled Installation", description: "Technicians trained for RCC ceilings, walls, and balcony mounts." },
