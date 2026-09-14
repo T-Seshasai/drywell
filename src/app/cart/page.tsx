@@ -13,6 +13,7 @@ import {
   mapProductToAnalyticsItem,
 } from "@/lib/analytics/events";
 import CashOnDeliveryPayment from "@/components/payment/CashOnDeliveryPayment";
+import { openWhatsAppOrder } from "@/lib/whatsapp";
 import PageHero from "@/components/layout/PageHero";
 import PageContent from "@/components/layout/PageContent";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, MapPin, Banknote } from "lucide-react";
@@ -125,6 +126,17 @@ export default function CartPage() {
 
       setOrderId(data.orderId);
       setShowCheckout(true);
+      openWhatsAppOrder({
+        orderId: data.orderId,
+        total,
+        paymentMethod: "cod",
+        customer: form,
+        items: items.map((i) => ({
+          name: i.name,
+          quantity: i.quantity,
+          price: i.price,
+        })),
+      });
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       setFormError(err instanceof Error ? err.message : "Something went wrong");
@@ -160,6 +172,28 @@ export default function CartPage() {
             <p className="text-emerald-600">Phone: {form.phone}</p>
           </div>
           <CashOnDeliveryPayment amount={total} orderId={orderId} />
+          <p className="text-xs text-stone-500 mt-4 text-center">
+            WhatsApp opened with your order details. Tap <strong>Send</strong> there so our team receives it.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              openWhatsAppOrder({
+                orderId,
+                total,
+                paymentMethod: "cod",
+                customer: form,
+                items: items.map((i) => ({
+                  name: i.name,
+                  quantity: i.quantity,
+                  price: i.price,
+                })),
+              });
+            }}
+            className="w-full mt-2 text-sm text-brand-600 hover:underline"
+          >
+            Open WhatsApp again
+          </button>
           <button
             type="button"
             onClick={handlePaymentDone}

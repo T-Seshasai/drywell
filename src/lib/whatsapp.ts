@@ -81,6 +81,72 @@ export function buildQuoteWhatsAppMessage(params: {
   return lines.join("\n");
 }
 
+export function buildOrderWhatsAppMessage(params: {
+  orderId: string;
+  total: number;
+  paymentMethod?: string;
+  customer: {
+    name: string;
+    phone: string;
+    apartmentName: string;
+    blockId: string;
+    flatNo: string;
+    address: string;
+    city: string;
+    state: string;
+    pincode: string;
+  };
+  items: Array<{ name: string; quantity: number; price: number }>;
+}) {
+  const payment =
+    params.paymentMethod === "cod" ? "Cash on Delivery" : params.paymentMethod ?? "Cash on Delivery";
+
+  const lines = [
+    "New order from Drywell Hangers website",
+    "",
+    `Order ID: ${params.orderId}`,
+    `Payment: ${payment}`,
+    `Total: ₹${params.total.toLocaleString("en-IN")}`,
+    "",
+    "Customer",
+    `Name: ${params.customer.name.trim()}`,
+    `Phone: ${params.customer.phone.trim()}`,
+    "",
+    "Delivery",
+    `${params.customer.apartmentName}, Block ${params.customer.blockId}, Flat ${params.customer.flatNo}`,
+    `${params.customer.address}, ${params.customer.city}, ${params.customer.state} — ${params.customer.pincode}`,
+    "",
+    "Items",
+    ...params.items.map(
+      (item) =>
+        `- ${item.name} x ${item.quantity} = ₹${(item.price * item.quantity).toLocaleString("en-IN")}`
+    ),
+  ];
+
+  return lines.join("\n");
+}
+
+export function openWhatsAppOrder(params: {
+  orderId: string;
+  total: number;
+  paymentMethod?: string;
+  customer: {
+    name: string;
+    phone: string;
+    apartmentName: string;
+    blockId: string;
+    flatNo: string;
+    address: string;
+    city: string;
+    state: string;
+    pincode: string;
+  };
+  items: Array<{ name: string; quantity: number; price: number }>;
+}) {
+  const url = buildWhatsAppUrl(buildOrderWhatsAppMessage(params));
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
 export function openWhatsAppQuote(params: {
   quoteId: string;
   name: string;
